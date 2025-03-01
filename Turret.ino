@@ -1,8 +1,9 @@
+//libraries
 #include "IRremote.h"
 #include <Servo.h>
 #include <Stepper.h>
 
-
+//assigning Arduino pins
 #define receiver A0
 Stepper horizontal(2048, 6, 8, 7, 9);
 Stepper vertical(2048, 10, 12, 11, 13);
@@ -13,7 +14,7 @@ int motor_state = 0;
 
 Servo shoot_ammo;
 
-//////////////////////      Receiver Stuff
+//IR receiver
 IRrecv irrecv(receiver);
 uint32_t last_decodedRawData = 0;
 void translateIR()
@@ -41,7 +42,8 @@ void translateIR()
   last_decodedRawData = irrecv.decodedIRData.decodedRawData;
   delay(100);
 }
-//////////////////////      Stepper Motor Stuff
+
+//Moves stepper motors left/right and up/down
 void left(){
   horizontal.step(-100);
 }
@@ -58,7 +60,8 @@ void up(){
 void down(){
   vertical.step(-100);
 }
-//////////////////////      Servo Connect Motor Stuff
+
+//Turns flywheels on/off
 void motor(){
   if(motor_state == 0){
     analogWrite(motor_control, 255);
@@ -77,7 +80,7 @@ void motor(){
   }
 }
 
-//////////////////////      Ammo Loader Stuff
+//Feeds darts into flywheels to shoot
 void shoot(){
   shoot_ammo.write(0);
   delay(1000);
@@ -86,7 +89,7 @@ void shoot(){
 
 
 
-//////////////////////      Setup Stuff
+//Initialization
 void setup()
 {
   Serial.begin(9600);
@@ -101,7 +104,7 @@ void setup()
 }
 
 
-//////////////////////      Running Stuff
+//Running Code
 void loop()
 {
   if (irrecv.decode())
